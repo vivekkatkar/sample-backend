@@ -17,7 +17,10 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+  .catch((err) => {
+    console.error("MongoDB connection error:", err);
+    process.exit(1); 
+  });
 
 const userSchema = new mongoose.Schema({
   name: String,
@@ -26,12 +29,6 @@ const userSchema = new mongoose.Schema({
 });
 
 const User = mongoose.model("User", userSchema);
-
-app.get("/get-text", (req, res) => {
-  const text =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
-  res.send(text);
-});
 
 app.get("/get-users", async (req, res) => {
   try {
@@ -42,6 +39,13 @@ app.get("/get-users", async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+app.get("/get-text", (req, res) => {
+  const text =
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.";
+  res.send(text);
+});
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
